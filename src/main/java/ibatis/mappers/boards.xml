@@ -7,7 +7,22 @@
 <sqlMap namespace="boards">
 
 	<select id="getAllBoards" resultClass="vo.Board">
-	
+		select
+			B.board_no 			 as no,
+			B.board_title 	     as title,
+			B.board_content      as content,
+			B.board_read_count   as readCount,
+			B.board_updated_date as updatedDate,
+			B.board_created_date as createdDate,
+			U.user_id 			 as "user.id",
+			U.user_name 		 as "user.name"
+		from
+			sample_boards B, sample_users U
+		where
+			B.board_deleted = 'N'
+			and B.user_id = U.user_id
+		order by
+			B.board_no desc
 	</select>
 	
 	<select id="getBoardByNo" parameterClass="int" resultClass="vo.Board">

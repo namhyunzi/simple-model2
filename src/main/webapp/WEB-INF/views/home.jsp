@@ -20,6 +20,9 @@
 			<a href="logout.do" class="btn btn-outline-primary">로그아웃</a>
 			<a href="register.do" class="btn btn-outline-primary">회원가입</a>
 		</div>
+		<div>
+			<a href="board/list.do" class="btn btn-outline-primary">게시판</a>
+		</div>
 		</div>
 	</div>
 </div>
