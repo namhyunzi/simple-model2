@@ -1,7 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+    pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -13,12 +11,14 @@
 <title>모델2</title>
 </head>
 <body>
+<c:set var="menu" value="게시판" />
+<%@ include file="../common/navbar.jsp" %>
 <div class="container">
 	<div class="row mb-3">
 		<div class="col-12">
 			<h1>게시글 목록</h1>
 			
-			${boardList }
+			<p>현재 페이지 : <c:out value="${param.page }" default="1" /></p>
 			<table class="table">
 				<thead>
 					<tr>
@@ -30,17 +30,41 @@
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach var="b" items="${boardList }">
-						<tr>
-							<td>${b.no }</td>
-							<td>${b.title }</td>
-							<td>${b.readCount }</td>
-							<td>${b.user.name }</td>
-							<td><fmt:formatDate value="${b.createdDate }" pattern="yyyy년 M월 d일"/></td>
-						</tr>
-					</c:forEach>
+					<c:choose>
+						<c:when test="${empty boardList }">
+							<tr>
+								<td colspan="5" class="text-center">데이터가 없습니다.</td>
+							</tr>
+						</c:when>
+						<c:otherwise>
+							<c:forEach var="board" items="${boardList }">
+								<tr>
+									<td>${board.no }</td>
+									<td>${board.title }</td>
+									<td>${board.readCount }</td>
+									<td>${board.user.name }</td>
+									<td><fmt:formatDate value="${board.createdDate }"/></td>
+								</tr>
+							</c:forEach>
+						</c:otherwise>
+					</c:choose>
 				</tbody>
 			</table>
+		</div>
+	</div>
+	
+	<div class="row mb-3">
+		<div class="col-12">
+			<nav class="pagination">
+				<ul class="pagination justify-content-center">
+					<c:forEach var="num" begin="1" end="5">
+						<li class="page-item ${param.page eq num ? 'active' : ''}">
+							<a href="list.do?page=${num }" class="page-link">${num }</a>
+						</li>
+					</c:forEach>
+					
+				</ul>
+			</nav>
 		</div>
 	</div>
 </div>
