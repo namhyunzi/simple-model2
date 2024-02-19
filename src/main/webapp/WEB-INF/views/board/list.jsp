@@ -18,8 +18,15 @@
 		<div class="col-12">
 			<h1>게시글 목록</h1>
 			
-			<p>현재 페이지 : <c:out value="${param.page }" default="1" /></p>
+			<p>현재 페이지 : ${paging.currentPage }/ ${paging.totalPages }</p>
 			<table class="table">
+				<colgroup>
+					<col width="10%">
+					<col width="*">
+					<col width="10%">
+					<col width="15%">
+					<col width="15%">
+				</colgroup>
 				<thead>
 					<tr>
 						<th>번호</th>
@@ -40,7 +47,7 @@
 							<c:forEach var="board" items="${boardList }">
 								<tr>
 									<td>${board.no }</td>
-									<td>${board.title }</td>
+									<td><a href="detail.do?no=${board.no }">${board.title }</a></td>
 									<td>${board.readCount }</td>
 									<td>${board.user.name }</td>
 									<td><fmt:formatDate value="${board.createdDate }"/></td>
@@ -55,18 +62,41 @@
 	
 	<div class="row mb-3">
 		<div class="col-12">
-			<nav class="pagination">
-				<ul class="pagination justify-content-center">
-					<c:forEach var="num" begin="1" end="5">
+			<nav>
+		 		<ul class="pagination justify-content-center">
+					<li class="page-item ${paging.first ? 'disabled' :'' }">
+						<a href="list.do?page=${paging.currentPage - 1 }"
+						class="page-link">이전</a>
+					</li>
+					
+					<c:forEach var="num" begin="${paging.beginPage}" end="${paging.endPage}">
 						<li class="page-item ${param.page eq num ? 'active' : ''}">
-							<a href="list.do?page=${num }" class="page-link">${num }</a>
+								<a href="list.do?page=${num }" class="page-link">${num }</a>
 						</li>
 					</c:forEach>
 					
+					<li class="page-item ${paging.last ? 'disabled' :'' }">
+						<a href="list.do?page=${paging.currentPage + 1 }"
+						class="page-link">다음</a>
+					</li>
 				</ul>
 			</nav>
 		</div>
 	</div>
+	
+	<!-- 
+		LOGIN_USER라는 속성명으로 조회했을 때 조회되는 정보가 있으면 
+		컨텐츠가 표시되게 한다.
+	 -->
+	<c:if test="${not empty LOGIN_USER }">
+	<div class="row mb-3">
+		<div class="col-12">
+			<div class="text-end">
+				<a href="insert.do" class="btn btn-primary">새 게시글</a>
+			</div>
+		</div>
+	</div>
+	</c:if>
 </div>
 </body>
 </html>
